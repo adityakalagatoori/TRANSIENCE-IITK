@@ -6,5 +6,5 @@ catboost_info/
 Thumbs.db
 
 # Local-only: not pushed to the repo
-audio/
+/audio/
 docs/PITCH_SCRIPT.md
