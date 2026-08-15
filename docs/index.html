@@ -396,8 +396,10 @@ html, body {
   color: var(--text-light);
   line-height: 1.6;
   white-space: nowrap;
+  overflow-wrap: normal;
+  max-width: 100%;
 }
-.eq-line.eq-small { font-size: 0.92rem; }
+.eq-line.eq-small { font-size: 0.85rem; }
 .eq-line.eq-muted {
   font-family: 'Inter', sans-serif;
   font-size: 0.78rem;
@@ -537,7 +539,7 @@ html, body {
     <div class="meta-row">
       <span>Team Transience</span>
       <span>Fugacity 2026 ML Hackathon, IIT Kharagpur</span>
-      <span>Preenithi Varshana · Aditya Kalagatoori · Kritika Pandey</span>
+      <span>Vaishnav Aditya · Preenithi Varshana · Kritika Pandey</span>
       <span>150 training rows, 50 held-out test rows</span>
     </div>
 
@@ -667,7 +669,8 @@ html, body {
         <div class="eq-card">
           <div class="eq-card-label">Energy Balance</div>
           <div class="eq-line eq-small">dT/dτ&nbsp;=&nbsp;[Uₐ(T<sub>j</sub>−T)</div>
-          <div class="eq-line eq-small">&nbsp;&nbsp;+&nbsp;(−ΔH₁)r₁&nbsp;+&nbsp;(−ΔH₂)r₂]&nbsp;/&nbsp;ρC<sub>p</sub></div>
+          <div class="eq-line eq-small">&nbsp;&nbsp;+&nbsp;(−ΔH₁)r₁</div>
+          <div class="eq-line eq-small">&nbsp;&nbsp;+&nbsp;(−ΔH₂)r₂]&nbsp;/&nbsp;ρC<sub>p</sub></div>
           <div class="eq-line eq-muted">jacket heat exchange + reaction enthalpy of both steps</div>
         </div>
       </div>
@@ -722,7 +725,7 @@ html, body {
       <span class="footer-mark">क्षणिक</span>
       <span class="footer-meta">Team Transience · Fugacity 2026 ML Hackathon · IIT Kharagpur</span>
     </div>
-    <div class="footer-right">Varshana · Kalagatoori · Pandey</div>
+    <div class="footer-right">Aditya · Varshana · Pandey</div>
   </footer>
 
 </div>
