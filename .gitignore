@@ -4,3 +4,7 @@ catboost_info/
 .ipynb_checkpoints/
 .DS_Store
 Thumbs.db
+
+# Local-only: not pushed to the repo
+audio/
+docs/PITCH_SCRIPT.md
