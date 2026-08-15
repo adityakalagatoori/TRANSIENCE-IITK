@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kshanik — Team Transience</title>
+<meta name="description" content="Physics-informed yield surrogate for a non-isothermal PFR — Team Transience, Fugacity 2026 ML Hackathon, IIT Kharagpur.">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+@font-face {
+  font-family: 'Fraunces';
+  src: local('Georgia');
+}
+
+:root {
+  --bg: #0d0a1a;
+  --bg-2: #100c20;
+  --surface: #1a1530;
+  --surface-2: #241d42;
+  --surface-light: #f4f2fb;
+  --surface-light-2: #ebe7f8;
+  --border: #332a5c;
+  --border-light: #ddd6f3;
+  --text: #ece9f7;
+  --text-dim: #a79fcc;
+  --text-light: #1c1730;
+  --text-light-dim: #5b5480;
+  --accent: #8b6cff;
+  --accent-soft: #6d54c9;
+  --accent-2: #4f9dff;
+  --good: #35c98f;
+  --warn: #ff9f5a;
+  --mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 1000px;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+/* ---------- HERO ---------- */
+.hero {
+  background:
+    radial-gradient(circle at 18% 0%, rgba(139,108,255,0.22), transparent 55%),
+    radial-gradient(circle at 85% 20%, rgba(79,157,255,0.12), transparent 50%),
+    var(--bg);
+  padding: 3.2rem 2.5rem 2.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.tagline-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.6rem;
+}
+
+.eyebrow {
+  font-size: 0.82rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #d9d1ff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.eyebrow .dot { color: var(--accent); }
+
+.pill-row { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.pill {
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.32em 0.85em;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+.pill.accent { background: rgba(139,108,255,0.18); border-color: rgba(139,108,255,0.5); color: #cabdff; }
+.pill.good { background: rgba(53,201,143,0.14); border-color: rgba(53,201,143,0.45); color: #7fe0bb; }
+.pill.neutral { background: rgba(255,255,255,0.04); }
+
+.name-block {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  margin: 0 0 0.6rem;
+}
+.wordmark {
+  font-family: 'Noto Sans Devanagari', 'Nirmala UI', 'Mangal', Georgia, serif;
+  font-size: clamp(2.8rem, 8vw, 4.6rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  margin: 0;
+  text-wrap: balance;
+}
+.wordmark-en {
+  font-family: Georgia, 'Fraunces', serif;
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 700;
+  color: var(--text-dim);
+  letter-spacing: 0.02em;
+}
+
+.subtitle {
+  font-size: 0.98rem;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+  margin: 0 0 1.7rem;
+}
+.abstract {
+  border-left: 3px solid var(--accent);
+  padding-left: 1.1rem;
+  max-width: 640px;
+  font-size: 1.05rem;
+  color: var(--text);
+  margin-bottom: 1.6rem;
+}
+.abstract b { color: #fff; font-weight: 600; }
+.abstract .headline-stat {
+  display: block;
+  margin-top: 0.6rem;
+  font-weight: 600;
+  color: #cabdff;
+}
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.4rem;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 1.1rem;
+}
+.meta-row span::before { content: '•'; color: var(--accent); margin-right: 0.55em; }
+.meta-row span:first-child::before { content: ''; margin-right: 0; }
+
+.repo-chip {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 0.5em 0.9em;
+  border-radius: 8px;
+}
+
+/* ---------- STAT STRIP ---------- */
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
+}
+.stat-strip .stat {
+  padding: 1.5rem 1.4rem;
+  border-right: 1px solid var(--border);
+}
+.stat-strip .stat:last-child { border-right: none; }
+.stat-num {
+  font-family: Georgia, serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+.stat-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-top: 0.35rem;
+}
+
+/* ---------- LIGHT SECTIONS ---------- */
+.section {
+  background: var(--surface-light);
+  color: var(--text-light);
+  padding: 2.6rem 2.5rem;
+}
+.section.alt { background: var(--surface-light-2); }
+
+.section-title {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.4rem;
+}
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-light);
+}
+
+/* problem vs innovation */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.1rem;
+}
+.card {
+  border-radius: 14px;
+  padding: 1.5rem 1.6rem;
+  border: 1px solid var(--border-light);
+}
+.card.gap { background: #fdf1ee; border-color: #f3d4c9; }
+.card.fix { background: #efeaff; border-color: #d9cdfa; }
+.card-tag {
+  font-size: 0.68rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.3em 0.75em;
+  border-radius: 999px;
+  display: inline-block;
+  margin-bottom: 0.9rem;
+}
+.card.gap .card-tag { background: #f6d9cd; color: #a34b23; }
+.card.fix .card-tag { background: #ddd0fb; color: #5a35b8; }
+.card h3 {
+  font-size: 1.15rem;
+  margin: 0 0 0.6rem;
+  font-weight: 700;
+  text-wrap: balance;
+}
+.card p { font-size: 0.92rem; color: var(--text-light-dim); margin: 0; }
+.card b { color: var(--text-light); }
+.card code {
+  font-family: var(--mono);
+  background: rgba(0,0,0,0.06);
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  font-size: 0.86em;
+}
+
+/* metric tiles */
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.metric-tile {
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 1.3rem 1.2rem;
+  text-align: left;
+}
+.metric-tile .m-label {
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-light-dim);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.metric-tile .m-value {
+  font-family: Georgia, serif;
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--accent-soft);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.metric-tile.win .m-value { color: #1f9d68; }
+.metric-tile .m-sub {
+  font-size: 0.78rem;
+  color: var(--text-light-dim);
+  margin-top: 0.5rem;
+}
+
+/* pipeline */
+.pipeline-track {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.9rem;
+  margin-bottom: 1.6rem;
+  position: relative;
+}
+.pipeline-track::before {
+  content: '';
+  position: absolute;
+  top: 21px;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: var(--border-light);
+  z-index: 0;
+}
+.p-node { text-align: center; position: relative; z-index: 1; }
+.p-num {
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: var(--text-light);
+  color: var(--surface-light);
+  display: flex; align-items: center; justify-content: center;
+  font-family: Georgia, serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: 0 auto 0.6rem;
+}
+.p-name {
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+.p-desc { font-size: 0.78rem; color: var(--text-light-dim); }
+
+.stage-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.stage-card {
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 1.3rem 1.4rem;
+  border-top: 3px solid var(--accent);
+}
+.stage-card.b { border-top-color: var(--accent-2); }
+.stage-card.c { border-top-color: var(--good); }
+.stage-card .stage-tag {
+  font-size: 0.64rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--accent-soft);
+  background: #efeaff;
+  padding: 0.25em 0.6em;
+  border-radius: 6px;
+  display: inline-block;
+  margin-bottom: 0.7rem;
+}
+.stage-card h4 { margin: 0 0 0.55rem; font-size: 1rem; }
+.stage-card p { font-size: 0.86rem; color: var(--text-light-dim); margin: 0 0 0.8rem; }
+.stage-result {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  background: var(--surface-light-2);
+  border-radius: 8px;
+  padding: 0.6em 0.8em;
+  color: var(--text-light-dim);
+}
+.stage-result b { color: var(--text-light); }
+
+/* footer */
+.footer {
+  background: var(--bg);
+  padding: 1.6rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  border-top: 1px solid var(--border);
+}
+.footer-left { display: flex; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+.footer-mark { font-family: 'Noto Sans Devanagari', 'Nirmala UI', Georgia, serif; font-weight: 700; font-size: 1.15rem; }
+.footer-meta { font-size: 0.78rem; color: var(--text-dim); }
+.footer-right { font-family: var(--mono); font-size: 0.78rem; color: var(--accent-2); }
+
+@media (max-width: 720px) {
+  .stat-strip, .split, .metric-row, .pipeline-track, .stage-cards { grid-template-columns: 1fr; }
+  .pipeline-track::before { display: none; }
+  .hero, .section { padding: 2rem 1.3rem; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="tagline-row">
+      <div class="eyebrow"><span class="dot">◆</span> Team Transience</div>
+      <div class="pill-row">
+        <span class="pill accent">FUGACITY 2026</span>
+        <span class="pill neutral">IIT KHARAGPUR</span>
+        <span class="pill good">PHASE 1 SUBMISSION</span>
+      </div>
+    </div>
+
+    <div class="name-block">
+      <h1 class="wordmark">क्षणिक</h1>
+      <span class="wordmark-en">Kshanik</span>
+    </div>
+    <p class="subtitle">"kṣaṇik" — transient, momentary &nbsp;·&nbsp; Physics-Informed Yield Surrogate for a Non-Isothermal Plug-Flow Reactor</p>
+
+    <div class="abstract">
+      A machine learning surrogate for reactor yield prediction, built by fitting the governing
+      reaction kinetics and energy balance directly, then applying <b>Gaussian Process</b> and
+      <b>CatBoost</b> models to correct only the residual error the mechanistic fit leaves behind.
+      <span class="headline-stat">Cross-validated RMSE 8.79 on 150 training observations</span>
+    </div>
+
+    <div class="meta-row">
+      <span>Team Transience</span>
+      <span>Fugacity 2026 ML Hackathon, IIT Kharagpur</span>
+      <span>Preenithi Varshana · Aditya Kalagatoori · Kritika Pandey</span>
+      <span>150 training rows, 50 held-out test rows</span>
+    </div>
+
+    <div class="repo-chip">train_dataset.csv → mechanistic_pfr.py → warped GPR / CatBoost → overall_yield</div>
+  </header>
+
+  <!-- ============ STAT STRIP ============ -->
+  <div class="stat-strip">
+    <div class="stat">
+      <div class="stat-num">25%</div>
+      <div class="stat-label">Rows at exact zero yield</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">5 → 13</div>
+      <div class="stat-label">Raw inputs → physics features</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">8.79</div>
+      <div class="stat-label">Best CV RMSE (warped GPR)</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">2</div>
+      <div class="stat-label">Models: small-data &amp; large-data</div>
+    </div>
+  </div>
+
+  <!-- ============ PROBLEM VS INNOVATION ============ -->
+  <section class="section">
+    <div class="section-title">The Core Problem vs. The Approach</div>
+    <div class="split">
+      <div class="card gap">
+        <span class="card-tag">Limitation of Direct Regression</span>
+        <h3>Black-Box Models Cannot Isolate the Yield Collapse</h3>
+        <p>
+          A regressor fit directly on <code>flow_rate</code>, <code>concentration</code>,
+          <code>inlet_T</code>, <code>length</code>, and <code>jacket_T</code> must infer, from 150
+          rows alone, that yield falls to exactly <b>0%</b> whenever residence time and temperature
+          drive the side reaction (B→C) past the desired one (A→B). No single raw feature correlates
+          strongly with yield — the highest is <b>|r| = 0.64</b> — because the governing variable is a
+          non-linear combination the model has no basis to construct from data this limited.
+        </p>
+      </div>
+      <div class="card fix">
+        <span class="card-tag">Transience Approach</span>
+        <h3>A Mechanistic Prior, Corrected by a Gaussian Process</h3>
+        <p>
+          We fit a non-isothermal PFR model directly — series kinetics <b>A→B→C</b> under Arrhenius
+          rate laws, coupled to a jacket energy balance — using nonlinear least squares on the training
+          set. Its output serves as the <b>prior mean</b> for a Gaussian Process, which is left to learn
+          only the mechanistic model's residual error rather than the full yield surface.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ METRICS ============ -->
+  <section class="section alt">
+    <div class="section-title">Model Performance — 5×10 Repeated K-Fold CV</div>
+    <div class="metric-row">
+      <div class="metric-tile">
+        <div class="m-label">Mechanistic Model Alone</div>
+        <div class="m-value">12.17</div>
+        <div class="m-sub">RMSE · physics only, no ML</div>
+      </div>
+      <div class="metric-tile">
+        <div class="m-label">Additive-Residual GPR</div>
+        <div class="m-value">10.14</div>
+        <div class="m-sub">RMSE · mechanistic mean + plain GP</div>
+      </div>
+      <div class="metric-tile win">
+        <div class="m-label">Warped-Logit GPR</div>
+        <div class="m-value">8.79</div>
+        <div class="m-sub">RMSE · selected small-data model</div>
+      </div>
+      <div class="metric-tile">
+        <div class="m-label">CatBoost + Synthetic</div>
+        <div class="m-value">11.35</div>
+        <div class="m-sub">RMSE · large-data model</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PIPELINE ============ -->
+  <section class="section">
+    <div class="section-title">How It Works — 5-Stage Modeling Pipeline</div>
+    <div class="pipeline-track">
+      <div class="p-node">
+        <div class="p-num">1</div>
+        <div class="p-name">Fit ODE</div>
+        <div class="p-desc">Arrhenius kinetics and energy balance, fit by least squares on the training set</div>
+      </div>
+      <div class="p-node">
+        <div class="p-num">2</div>
+        <div class="p-name">Engineer Features</div>
+        <div class="p-desc">Damköhler numbers, selectivity ratio, residence time, ΔT derived from the fit</div>
+      </div>
+      <div class="p-node">
+        <div class="p-num">3</div>
+        <div class="p-name">Warp Target</div>
+        <div class="p-desc">Logit transform of yield/100, respecting the [0, 100] boundary</div>
+      </div>
+      <div class="p-node">
+        <div class="p-num">4</div>
+        <div class="p-name">Learn Residual</div>
+        <div class="p-desc">Matérn-kernel Gaussian Process fits the mechanistic model's error</div>
+      </div>
+      <div class="p-node">
+        <div class="p-num">5</div>
+        <div class="p-name">Predict</div>
+        <div class="p-desc">Inverse transform back to overall_yield for the test set</div>
+      </div>
+    </div>
+
+    <div class="stage-cards">
+      <div class="stage-card">
+        <span class="stage-tag">Mechanistic Foundation</span>
+        <h4>Non-Isothermal PFR Model</h4>
+        <p>
+          Series reaction A→B→C under Arrhenius kinetics k₁(T), k₂(T), coupled to a jacket energy
+          balance with explicit reaction-heat terms (Fogler, <i>Elements of Chemical Reaction
+          Engineering</i>, Ch. 8). Fit as a grey-box model via multi-start nonlinear least squares,
+          not assumed from literature constants.
+        </p>
+        <div class="stage-result">Train RMSE: <b>12.17</b> &nbsp;·&nbsp; Ea₂ &gt; Ea₁, consistent with side-reaction dominance at high temperature</div>
+      </div>
+      <div class="stage-card b">
+        <span class="stage-tag">Small-Data Model</span>
+        <h4>Warped Gaussian Process</h4>
+        <p>
+          The GP is trained in logit(yield/100) space rather than on the raw residual. This is the
+          statistically appropriate likelihood for a target bounded on [0, 100] with substantial mass
+          at the boundary, consistent with the censored-regression and warped-GP literature.
+        </p>
+        <div class="stage-result">CV RMSE: <b>8.79</b> ± 3.87 &nbsp;·&nbsp; outperforms both additive-residual and classifier-gated variants</div>
+      </div>
+      <div class="stage-card c">
+        <span class="stage-tag">Large-Data Model</span>
+        <h4>CatBoost with Synthetic Augmentation</h4>
+        <p>
+          5,000 synthetic observations, sampled across the operating envelope and simulated through
+          the fitted ODE, are combined with the real data at a 0.15× training weight. A classifier
+          stage first separates the collapsed-yield regime before a regressor is applied, a strategy
+          intended to scale to a larger production dataset.
+        </p>
+        <div class="stage-result">CV RMSE: <b>11.35</b> &nbsp;·&nbsp; versus 15.24 on real data alone, no augmentation</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer-left">
+      <span class="footer-mark">क्षणिक</span>
+      <span class="footer-meta">Team Transience · Fugacity 2026 ML Hackathon · IIT Kharagpur</span>
+    </div>
+    <div class="footer-right">Varshana · Kalagatoori · Pandey</div>
+  </footer>
+
+</div>
+</body>
+</html>
