@@ -394,6 +394,28 @@ html, body {
   .pipeline-track::before { display: none; }
   .hero, .section { padding: 2rem 1.3rem; }
 }
+
+/* ---------- PRINT / PDF ---------- */
+@media print {
+  @page { size: A4; margin: 0; }
+  html, body { width: 210mm; }
+  .page { max-width: none; }
+
+  /* Never split a card, tile, or pipeline node across a page break */
+  .card, .metric-tile, .stage-card, .p-node, .stat {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* The stat strip and footer are short and self-contained: keep them
+     whole. The hero and each content section are allowed to break
+     between their cards (each card is individually protected above),
+     so no page is left with a large forced blank void. */
+  .stat-strip, .footer { break-inside: avoid; page-break-inside: avoid; }
+
+  /* Section title + its rule should stay with the content that follows */
+  .section-title { break-after: avoid; }
+}
 </style>
 </head>
 <body>
