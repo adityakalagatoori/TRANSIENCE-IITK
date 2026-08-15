@@ -532,6 +532,22 @@ html, body {
   transition: bottom 0.3s ease, opacity 0.3s ease;
 }
 .audio-bar.audio-bar-visible { bottom: 1.2rem; opacity: 1; }
+.audio-bar.audio-bar-blocked {
+  border-color: var(--accent);
+  animation: audio-pulse 1.6s ease-in-out infinite;
+}
+.audio-bar.audio-bar-blocked .audio-sub::after {
+  content: " 4 tap anywhere to start";
+  color: #cabdff;
+  font-weight: 700;
+}
+@keyframes audio-pulse {
+  0%, 100% { box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 0 0 rgba(139,108,255,0.5); }
+  50% { box-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 0 0 8px rgba(139,108,255,0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .audio-bar.audio-bar-blocked { animation: none; }
+}
 .audio-info { display: flex; flex-direction: column; min-width: 0; flex-shrink: 0; }
 .audio-label {
   font-size: 0.82rem;
@@ -859,6 +875,8 @@ html, body {
   var label = document.getElementById('audioLabel');
   var closeBtn = document.getElementById('audioClose');
 
+  var pendingHash = null;
+
   function playForHash(hash) {
     var key = (hash || '').replace('#', '');
     if (!AUDIO_SRC[key]) return;
@@ -868,12 +886,28 @@ html, body {
       label.textContent = AUDIO_LABEL[key];
     }
     bar.classList.add('audio-bar-visible');
+    bar.classList.remove('audio-bar-blocked');
     player.play().catch(function () {
-      /* Autoplay can be blocked until the visitor interacts with the
-         page at least once; the visible player with controls lets them
-         press play manually in that case. */
+      /* Browsers block audio-with-sound autoplay until the visitor has
+         interacted with THIS page at least once (a click on the PDF link
+         opens a new tab, which the browser does not count as interaction
+         on the new page). Flag the bar so it visibly asks for a tap, and
+         retry play on the very next interaction anywhere on the page. */
+      bar.classList.add('audio-bar-blocked');
+      pendingHash = key;
     });
   }
+
+  function retryOnFirstInteraction() {
+    if (pendingHash) {
+      player.play().then(function () {
+        bar.classList.remove('audio-bar-blocked');
+        pendingHash = null;
+      }).catch(function () {});
+    }
+  }
+  document.addEventListener('click', retryOnFirstInteraction);
+  document.addEventListener('touchstart', retryOnFirstInteraction, {passive: true});
 
   closeBtn.addEventListener('click', function () {
     player.pause();
