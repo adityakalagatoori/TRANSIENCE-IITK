@@ -207,24 +207,38 @@ html, body {
 .listen-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.45em;
+  gap: 0.55em;
   font-size: 0.82rem;
-  font-weight: 600;
+  font-weight: 700;
   text-decoration: none;
-  color: #cabdff;
-  background: rgba(139,108,255,0.14);
-  border: 1px solid rgba(139,108,255,0.4);
-  padding: 0.5em 0.95em;
+  letter-spacing: 0.01em;
+  padding: 0.55em 1.05em 0.55em 0.85em;
   border-radius: 999px;
   margin-bottom: 1.1rem;
+  transition: background 0.15s ease;
+  /* dark-ground default (hero) */
+  color: #cabdff;
+  background: rgba(139,108,255,0.16);
+  border: 1px solid rgba(139,108,255,0.45);
 }
-.listen-link:hover { background: rgba(139,108,255,0.26); }
+.listen-link:hover { background: rgba(139,108,255,0.28); }
 .section .listen-link {
+  /* light-ground override (all other sections) */
   color: var(--accent-soft);
   background: #efeaff;
   border-color: #d9cdfa;
 }
 .section .listen-link:hover { background: #e2d8fc; }
+
+.listen-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  display: inline-block;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5'/%3E%3Cpath d='M15.54 8.46a5 5 0 0 1 0 7.07'/%3E%3Cpath d='M19.07 4.93a10 10 0 0 1 0 14.14'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5'/%3E%3Cpath d='M15.54 8.46a5 5 0 0 1 0 7.07'/%3E%3Cpath d='M19.07 4.93a10 10 0 0 1 0 14.14'/%3E%3C/svg%3E") center / contain no-repeat;
+}
 
 /* ---------- STAT STRIP ---------- */
 .stat-strip {
@@ -536,8 +550,7 @@ html, body {
   border-color: var(--accent);
   animation: audio-pulse 1.6s ease-in-out infinite;
 }
-.audio-bar.audio-bar-blocked .audio-sub::after {
-  content: " 4 tap anywhere to start";
+.audio-bar.audio-bar-blocked .audio-sub {
   color: #cabdff;
   font-weight: 700;
 }
@@ -629,7 +642,7 @@ html, body {
       </div>
     </div>
 
-    <a class="listen-link" href="https://adityakalagatoori.github.io/TRANSIENCE-IITK/#page-1" target="_blank" rel="noopener">&#128266; Click to hear the team explain this page</a>
+    <a class="listen-link" href="https://adityakalagatoori.github.io/TRANSIENCE-IITK/#page-1" target="_blank" rel="noopener"><span class="listen-icon" aria-hidden="true"></span>Hear the team explain this page</a>
     <div class="name-block">
       <h1 class="wordmark">क्षणिक</h1>
       <span class="wordmark-en">Kshanik</span>
@@ -681,7 +694,7 @@ html, body {
   <!-- ============ PROBLEM VS INNOVATION ============ -->
   <section class="section page-break" id="page-2">
     <div class="section-title">The Core Problem vs. The Approach</div>
-    <a class="listen-link" href="https://adityakalagatoori.github.io/TRANSIENCE-IITK/#page-2" target="_blank" rel="noopener">&#128266; Click to hear the team explain this page</a>
+    <a class="listen-link" href="https://adityakalagatoori.github.io/TRANSIENCE-IITK/#page-2" target="_blank" rel="noopener"><span class="listen-icon" aria-hidden="true"></span>Hear the team explain this page</a>
     <div class="split">
       <div class="card gap">
         <span class="card-tag">Limitation of Direct Regression</span>
@@ -738,7 +751,7 @@ html, body {
   <!-- ============ PIPELINE ============ -->
   <section class="section page-break" id="page-3">
     <div class="section-title">How It Works — 5-Stage Modeling Pipeline</div>
-    <a class="listen-link" href="https://adityakalagatoori.github.io/TRANSIENCE-IITK/#page-3" target="_blank" rel="noopener">&#128266; Click to hear the team explain this page</a>
+    <a class="listen-link" href="https://adityakalagatoori.github.io/TRANSIENCE-IITK/#page-3" target="_blank" rel="noopener"><span class="listen-icon" aria-hidden="true"></span>Hear the team explain this page</a>
     <div class="pipeline-track">
       <div class="p-node">
         <div class="p-num">1</div>
@@ -797,7 +810,7 @@ html, body {
       </div>
     </div>
 
-    <a class="listen-link page-break" href="https://adityakalagatoori.github.io/TRANSIENCE-IITK/#page-4" id="page-4" target="_blank" rel="noopener">&#128266; Click to hear the team explain this page</a>
+    <a class="listen-link page-break" href="https://adityakalagatoori.github.io/TRANSIENCE-IITK/#page-4" id="page-4" target="_blank" rel="noopener"><span class="listen-icon" aria-hidden="true"></span>Hear the team explain this page</a>
     <div class="stage-cards">
       <div class="stage-card">
         <span class="stage-tag">Mechanistic Foundation</span>
@@ -849,8 +862,8 @@ html, body {
 <div class="audio-bar" id="audioBar" role="region" aria-label="Team audio walkthrough">
   <button class="audio-close" id="audioClose" aria-label="Close audio player">×</button>
   <div class="audio-info">
-    <span class="audio-label" id="audioLabel">Page 1 — Team walkthrough</span>
-    <span class="audio-sub">Team Transience, spoken walkthrough</span>
+    <span class="audio-label" id="audioLabel">Page 1</span>
+    <span class="audio-sub" id="audioSub">Team Transience, spoken walkthrough</span>
   </div>
   <audio id="audioPlayer" controls preload="none"></audio>
 </div>
@@ -876,6 +889,9 @@ html, body {
   var closeBtn = document.getElementById('audioClose');
 
   var pendingHash = null;
+  var subEl = document.getElementById('audioSub');
+  var DEFAULT_SUB = 'Team Transience, spoken walkthrough';
+  var TAP_SUB = 'Tap anywhere on the page to start playback';
 
   function playForHash(hash) {
     var key = (hash || '').replace('#', '');
@@ -887,6 +903,7 @@ html, body {
     }
     bar.classList.add('audio-bar-visible');
     bar.classList.remove('audio-bar-blocked');
+    subEl.textContent = DEFAULT_SUB;
     player.play().catch(function () {
       /* Browsers block audio-with-sound autoplay until the visitor has
          interacted with THIS page at least once (a click on the PDF link
@@ -894,6 +911,7 @@ html, body {
          on the new page). Flag the bar so it visibly asks for a tap, and
          retry play on the very next interaction anywhere on the page. */
       bar.classList.add('audio-bar-blocked');
+      subEl.textContent = TAP_SUB;
       pendingHash = key;
     });
   }
@@ -902,6 +920,7 @@ html, body {
     if (pendingHash) {
       player.play().then(function () {
         bar.classList.remove('audio-bar-blocked');
+        subEl.textContent = DEFAULT_SUB;
         pendingHash = null;
       }).catch(function () {});
     }
