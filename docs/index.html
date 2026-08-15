@@ -204,6 +204,28 @@ html, body {
 }
 .link-chip:hover { background: rgba(139,108,255,0.26); }
 
+.listen-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  color: #cabdff;
+  background: rgba(139,108,255,0.14);
+  border: 1px solid rgba(139,108,255,0.4);
+  padding: 0.5em 0.95em;
+  border-radius: 999px;
+  margin-bottom: 1.1rem;
+}
+.listen-link:hover { background: rgba(139,108,255,0.26); }
+.section .listen-link {
+  color: var(--accent-soft);
+  background: #efeaff;
+  border-color: #d9cdfa;
+}
+.section .listen-link:hover { background: #e2d8fc; }
+
 /* ---------- STAT STRIP ---------- */
 .stat-strip {
   display: grid;
@@ -490,6 +512,50 @@ html, body {
 .footer-meta { font-size: 0.78rem; color: var(--text-dim); }
 .footer-right { font-family: var(--mono); font-size: 0.78rem; color: var(--accent-2); }
 
+/* ---------- AUDIO WALKTHROUGH BAR ---------- */
+.audio-bar {
+  position: fixed;
+  left: 50%;
+  bottom: -100px;
+  transform: translateX(-50%);
+  width: min(560px, calc(100% - 2rem));
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  padding: 0.9rem 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  z-index: 100;
+  opacity: 0;
+  transition: bottom 0.3s ease, opacity 0.3s ease;
+}
+.audio-bar.audio-bar-visible { bottom: 1.2rem; opacity: 1; }
+.audio-info { display: flex; flex-direction: column; min-width: 0; flex-shrink: 0; }
+.audio-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.audio-sub { font-size: 0.7rem; color: var(--text-dim); margin-top: 0.1rem; }
+.audio-bar audio { flex: 1; min-width: 0; height: 32px; }
+.audio-close {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.2rem;
+  order: -1;
+}
+.audio-close:hover { color: var(--text); }
+.audio-close:focus-visible, .link-chip:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
 @media (max-width: 720px) {
   .stat-strip, .split, .metric-row, .pipeline-track, .stage-cards, .eq-grid { grid-template-columns: 1fr; }
   .pipeline-track::before { display: none; }
@@ -519,7 +585,12 @@ html, body {
      4. Stage detail cards + footer
      Each break is placed explicitly so every page is composed on
      purpose, rather than wherever content happens to overflow. */
-  .page-break { break-before: page; page-break-before: always; }
+  .page-break {
+    break-before: page;
+    page-break-before: always;
+    display: block; /* break-before is unreliable on inline-level boxes */
+  }
+  a.listen-link.page-break { width: fit-content; }
 }
 </style>
 </head>
@@ -527,7 +598,7 @@ html, body {
 <div class="page">
 
   <!-- ============ HERO ============ -->
-  <header class="hero">
+  <header class="hero" id="page-1">
     <div class="tagline-row">
       <div class="eyebrow"><span class="dot">◆</span> Team Transience</div>
       <div class="hero-right">
@@ -542,6 +613,7 @@ html, body {
       </div>
     </div>
 
+    <a class="listen-link" href="https://adityakalagatoori.github.io/TRANSIENCE-IITK/#page-1" target="_blank" rel="noopener">&#128266; Click to hear the team explain this page</a>
     <div class="name-block">
       <h1 class="wordmark">क्षणिक</h1>
       <span class="wordmark-en">Kshanik</span>
@@ -591,8 +663,9 @@ html, body {
   </div>
 
   <!-- ============ PROBLEM VS INNOVATION ============ -->
-  <section class="section page-break">
+  <section class="section page-break" id="page-2">
     <div class="section-title">The Core Problem vs. The Approach</div>
+    <a class="listen-link" href="https://adityakalagatoori.github.io/TRANSIENCE-IITK/#page-2" target="_blank" rel="noopener">&#128266; Click to hear the team explain this page</a>
     <div class="split">
       <div class="card gap">
         <span class="card-tag">Limitation of Direct Regression</span>
@@ -647,8 +720,9 @@ html, body {
   </section>
 
   <!-- ============ PIPELINE ============ -->
-  <section class="section page-break">
+  <section class="section page-break" id="page-3">
     <div class="section-title">How It Works — 5-Stage Modeling Pipeline</div>
+    <a class="listen-link" href="https://adityakalagatoori.github.io/TRANSIENCE-IITK/#page-3" target="_blank" rel="noopener">&#128266; Click to hear the team explain this page</a>
     <div class="pipeline-track">
       <div class="p-node">
         <div class="p-num">1</div>
@@ -707,7 +781,8 @@ html, body {
       </div>
     </div>
 
-    <div class="stage-cards page-break">
+    <a class="listen-link page-break" href="https://adityakalagatoori.github.io/TRANSIENCE-IITK/#page-4" id="page-4" target="_blank" rel="noopener">&#128266; Click to hear the team explain this page</a>
+    <div class="stage-cards">
       <div class="stage-card">
         <span class="stage-tag">Mechanistic Foundation</span>
         <h4>Non-Isothermal PFR Model</h4>
@@ -753,5 +828,67 @@ html, body {
   </footer>
 
 </div>
+
+<!-- ============ AUDIO WALKTHROUGH PLAYER ============ -->
+<div class="audio-bar" id="audioBar" role="region" aria-label="Team audio walkthrough">
+  <button class="audio-close" id="audioClose" aria-label="Close audio player">×</button>
+  <div class="audio-info">
+    <span class="audio-label" id="audioLabel">Page 1 — Team walkthrough</span>
+    <span class="audio-sub">Team Transience, spoken walkthrough</span>
+  </div>
+  <audio id="audioPlayer" controls preload="none"></audio>
+</div>
+
+<script>
+(function () {
+  var AUDIO_SRC = {
+    'page-1': 'audio/page-1.mp3',
+    'page-2': 'audio/page-2.mp3',
+    'page-3': 'audio/page-3.ogg',
+    'page-4': 'audio/page-4.mp3'
+  };
+  var AUDIO_LABEL = {
+    'page-1': 'Page 1 — Kshanik',
+    'page-2': 'Page 2 — The Problem vs. The Approach',
+    'page-3': 'Page 3 — How It Works',
+    'page-4': 'Page 4 — Model Performance, in Depth'
+  };
+
+  var bar = document.getElementById('audioBar');
+  var player = document.getElementById('audioPlayer');
+  var label = document.getElementById('audioLabel');
+  var closeBtn = document.getElementById('audioClose');
+
+  function playForHash(hash) {
+    var key = (hash || '').replace('#', '');
+    if (!AUDIO_SRC[key]) return;
+    if (player.getAttribute('data-key') !== key) {
+      player.setAttribute('data-key', key);
+      player.src = AUDIO_SRC[key];
+      label.textContent = AUDIO_LABEL[key];
+    }
+    bar.classList.add('audio-bar-visible');
+    player.play().catch(function () {
+      /* Autoplay can be blocked until the visitor interacts with the
+         page at least once; the visible player with controls lets them
+         press play manually in that case. */
+    });
+  }
+
+  closeBtn.addEventListener('click', function () {
+    player.pause();
+    bar.classList.remove('audio-bar-visible');
+  });
+
+  window.addEventListener('hashchange', function () {
+    playForHash(window.location.hash);
+  });
+
+  if (window.location.hash) {
+    playForHash(window.location.hash);
+  }
+})();
+</script>
+
 </body>
 </html>
