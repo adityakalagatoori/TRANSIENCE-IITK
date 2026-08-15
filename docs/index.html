@@ -185,6 +185,25 @@ html, body {
   border-radius: 8px;
 }
 
+.link-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+.link-chip {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #cabdff;
+  background: rgba(139,108,255,0.14);
+  border: 1px solid rgba(139,108,255,0.45);
+  padding: 0.55em 1em;
+  border-radius: 8px;
+  text-decoration: none;
+}
+.link-chip:hover { background: rgba(139,108,255,0.26); }
+
 /* ---------- STAT STRIP ---------- */
 .stat-strip {
   display: grid;
@@ -544,6 +563,11 @@ html, body {
     </div>
 
     <div class="repo-chip">train_dataset.csv → mechanistic_pfr.py → warped GPR / CatBoost → overall_yield</div>
+
+    <div class="link-row">
+      <a class="link-chip" href="https://github.com/adityakalagatoori/TRANSIENCE-IITK" target="_blank" rel="noopener">GitHub Repository ↗</a>
+      <a class="link-chip" href="https://github.com/adityakalagatoori/TRANSIENCE-IITK/blob/main/docs/report/Kshanik_Technical_Report.pdf" target="_blank" rel="noopener">Full Technical Report (PDF) ↗</a>
+    </div>
   </header>
 
   <!-- ============ STAT STRIP ============ -->

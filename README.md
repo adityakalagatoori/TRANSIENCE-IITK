@@ -4,8 +4,9 @@
 Fugacity 2026 ML Hackathon · IIT Kharagpur
 
 Live brief: **[GitHub Pages site](https://adityakalagatoori.github.io/TRANSIENCE-IITK/)**
+Full technical report: **[Kshanik_Technical_Report.pdf](docs/report/Kshanik_Technical_Report.pdf)** ([LaTeX source](docs/report/kshanik_report.tex))
 
-Team: Preenithi Varshana · Aditya Kalagatoori · Kritika Pandey
+Team: Vaishnav Aditya · Preenithi Varshana · Kritika Pandey
 
 ---
 
@@ -42,7 +43,7 @@ Two models are built for two different data regimes:
 | **Folder** | [`model_small_data_GPR/`](model_small_data_GPR/) | [`model_large_data_CatBoost/`](model_large_data_CatBoost/) |
 | **Model** | Warped (logit-space) Gaussian Process Regression | CatBoost, two-stage classifier + regressor |
 | **Data used** | 150 real rows only | 150 real rows + 5,000 ODE-simulated synthetic rows |
-| **CV RMSE** | **8.79** | **11.35** |
+| **CV RMSE** | **8.79** | **11.35** (two-stage, real+synthetic) |
 | **When to use** | This competition (n=150) | If the dataset scales up in production |
 
 The warped-GP is the submission candidate — the competition only allows one final submission, and it has the
@@ -55,8 +56,11 @@ lower cross-validated RMSE.
 ├── ML_Hackathon_Problem_Statement_Final.pdf   Original problem statement (reference only)
 ├── README.md                                  This file
 ├── docs/
-│   └── index.html                             Project brief — served via GitHub Pages (see §6)
-├── audio/                                      Audio walkthroughs / pitch recordings (added separately)
+│   ├── index.html                             Project brief — served via GitHub Pages (see §6)
+│   ├── Kshanik_Team_Transience.pdf             Pitch-deck PDF export of the brief (4 pages)
+│   └── report/
+│       ├── kshanik_report.tex                 Full technical report, LaTeX source
+│       └── Kshanik_Technical_Report.pdf        Full technical report, compiled PDF (§8)
 ├── model_small_data_GPR/                       SMALL-DATA MODEL — physics-informed GPR
 │   ├── train_dataset.csv                       150 labeled rows (competition-provided)
 │   ├── test_dataset.csv                        50 unlabeled rows to predict (competition-provided)
@@ -161,14 +165,23 @@ settings step in the commands below.
 |---|---|---|
 | Mechanistic ODE alone (no ML) | 12.17 | Physics-only baseline |
 | GPR — additive residual | 10.14 | Plain GP on raw residual |
+| GPR — two-stage (classifier + GP) | 10.85 | Worse than single-stage; kept for record |
 | **GPR — warped (logit) residual** | **8.79** | **Selected small-data model** |
 | CatBoost — real data only | 15.24 | No synthetic augmentation |
-| CatBoost — real + synthetic | 12.67 | Synthetic augmentation, single-stage |
-| **CatBoost — two-stage, real + synthetic** | **11.35** | **Selected large-data model** |
+| CatBoost — real + synthetic, single-stage | 12.67 | Synthetic augmentation, no classifier gate |
+| **CatBoost — real + synthetic, two-stage** | **11.35** | **Selected large-data model** |
 
 All RMSE values are 5-fold cross-validation, repeated 10×, evaluated on real training rows only.
 
-## 8. References
+## 8. Full Technical Report
+
+[`docs/report/Kshanik_Technical_Report.pdf`](docs/report/Kshanik_Technical_Report.pdf) is a full LaTeX-typeset
+technical report covering the governing equations, parameter estimation methodology, both models in detail,
+all cross-validation results (including negative results — e.g. why the two-stage GPR variant was rejected),
+and a discussion of the two-model small-data/large-data strategy. The LaTeX source is at
+[`docs/report/kshanik_report.tex`](docs/report/kshanik_report.tex).
+
+## 9. References
 
 - H. S. Fogler, *Elements of Chemical Reaction Engineering*, Ch. 8 — non-isothermal PFR energy balance.
 - R. Kiryo, G. Niu, M. C. du Plessis, M. Sugiyama, "Positive-Unlabeled Learning with Non-Negative Risk
